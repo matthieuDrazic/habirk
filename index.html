@@ -5,23 +5,23 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#052f42">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<title>SharkHabits V4</title>
+<title>SharkHabits V4.1</title>
 <link rel="manifest" href="manifest.json">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<header><div><small>SHARKHABITS V4</small><h1 id="pageTitle">Mon océan</h1></div><button class="icon" id="settingsBtn">⚙️</button></header>
+<header><div><small>SHARKHABITS V4.1</small><h1 id="pageTitle">Mon océan</h1></div><button class="icon" id="settingsBtn">⚙️</button></header>
 
 <main>
 <section id="home" class="page active">
-  <button id="openAquarium" class="ocean card oceanButton" aria-label="Ouvrir mon aquarium">
+  <div id="openAquarium" class="ocean card oceanButton" role="button" tabindex="0" aria-label="Ouvrir mon aquarium">
     <div class="bubbles">○　·　○　　　·　○</div>
     <div id="heroShark" class="heroShark">🦈</div>
     <div id="miniDecor" class="miniDecor"></div>
     <div class="enterOcean">↗ Entrer dans mon aquarium</div>
     <div class="level"><b id="level"></b><span id="xpText"></span></div>
     <div class="bar"><i id="xpBar"></i></div><div class="wallet">🦷 <b id="teeth"></b></div>
-  </button>
+  </div>
   <div id="emptyWelcome"></div>
   <div class="sectionTitle"><h2>Aujourd'hui</h2><span id="todayLabel"></span></div>
   <div id="todayList"></div>
@@ -107,6 +107,6 @@
 </form></dialog>
 
 <dialog id="settingsDialog"><div class="settings"><div class="modalHead"><h2>Paramètres</h2><button class="icon" id="closeSettings">✕</button></div>
-<button class="primary wide" id="exportBtn">📤 Exporter ma sauvegarde</button><label class="import">📥 Importer une sauvegarde<input id="importFile" type="file" accept=".json,application/json"></label><button class="danger wide reset" id="resetBtn">Effacer toutes les données</button><p class="muted">V4.0 — données enregistrées localement.</p></div></dialog>
+<button class="primary wide" id="exportBtn">📤 Exporter ma sauvegarde</button><label class="import">📥 Importer une sauvegarde<input id="importFile" type="file" accept=".json,application/json"></label><button class="danger wide reset" id="resetBtn">Effacer toutes les données</button><p class="muted">V4.1 — données enregistrées localement.</p></div></dialog>
 <script src="app.js"></script>
 </body></html>
