@@ -1,96 +1,74 @@
-const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
-const DAY=86400000;
-const iso=d=>new Date(d).toISOString().slice(0,10);
-const today=()=>iso(new Date());
-const emojis={sport:"🏃",maison:"🧹",sante:"❤️",perso:"🌱"};
-const initial={
- xp:0,teeth:120,activeShark:"Requin gris",owned:["Requin gris"],
- goals:[
-  {id:"run",name:"Course",category:"sport",type:"period",target:10,unit:"km",repeat:"week",start:today(),flexible:true},
-  {id:"gym",name:"Musculation",category:"sport",type:"habit",target:3,unit:"séances",repeat:"week",start:today(),flexible:true},
-  {id:"clean",name:"Ménage",category:"maison",type:"habit",target:2,unit:"tâches",repeat:"week",start:today(),flexible:true},
-  {id:"read",name:"Lecture",category:"perso",type:"habit",target:5,unit:"séances",repeat:"week",start:today(),flexible:true},
-  {id:"annual",name:"Course annuelle",category:"sport",type:"long",target:1000,unit:"km",start:new Date().getFullYear()+"-01-01",end:new Date().getFullYear()+"-12-31",source:"run"},
-  {id:"weight",name:"Poids",category:"sante",type:"metric",target:62,unit:"kg",start:today(),end:iso(new Date(Date.now()+180*DAY)),baseline:70}
- ],activities:[],historyWeeks:[72,81,66,88,76,91,84,0]
-};
-let data=JSON.parse(localStorage.getItem("sharkHabitsV2")||"null")||initial;
-let weekOffset=0, filter="all";
-function save(){localStorage.setItem("sharkHabitsV2",JSON.stringify(data))}
-function monday(d=new Date()){d=new Date(d); let n=(d.getDay()+6)%7; d.setHours(0,0,0,0); d.setDate(d.getDate()-n); return d}
-function periodBounds(g,date=new Date()){
- let d=new Date(date), s,e;
- if(g.repeat==="day"){s=new Date(d);s.setHours(0,0,0,0);e=new Date(s.getTime()+DAY)}
- else if(g.repeat==="month"){s=new Date(d.getFullYear(),d.getMonth(),1);e=new Date(d.getFullYear(),d.getMonth()+1,1)}
- else{s=monday(d);e=new Date(s.getTime()+7*DAY)}
- return [s,e]
-}
-function valueFor(g,date=new Date()){
- if(g.type==="metric"){let a=data.activities.filter(x=>x.goal===g.id).sort((a,b)=>a.date.localeCompare(b.date));return a.length?a[a.length-1].value:g.baseline||0}
- if(g.type==="long"){
-   let ids=[g.id]; if(g.source)ids.push(g.source);
-   return data.activities.filter(x=>ids.includes(x.goal)&&(!g.start||x.date>=g.start)&&(!g.end||x.date<=g.end)).reduce((s,x)=>s+x.value,0)
- }
- if(g.type==="once") return data.activities.filter(x=>x.goal===g.id).reduce((s,x)=>s+x.value,0);
- let [s,e]=periodBounds(g,date);
- return data.activities.filter(x=>x.goal===g.id&&new Date(x.date+"T12:00")>=s&&new Date(x.date+"T12:00")<e).reduce((s,x)=>s+x.value,0)
-}
-function pct(g,v=valueFor(g)){if(g.type==="metric"){let total=Math.abs((g.baseline||v)-g.target),done=Math.abs((g.baseline||v)-v);return Math.min(100,total?done/total*100:100)}return Math.min(100,g.target?v/g.target*100:0)}
-function goalCard(g,date=new Date()){
- let v=valueFor(g,date), p=pct(g,v), label=g.type==="metric"?`${v} ${g.unit} → ${g.target} ${g.unit}`:`${(+v.toFixed(1))} / ${g.target} ${g.unit}`;
- let repeat=g.repeat==="week"?"cette semaine":g.repeat==="month"?"ce mois":g.repeat==="day"?"aujourd'hui":g.type==="long"?"objectif global":g.type==="metric"?"mesure":"ponctuel";
- return `<div class="goalcard"><div class="goalTop"><span class="emoji">${emojis[g.category]||"🎯"}</span><div class="goalName">${g.name}<div class="muted">${repeat}</div></div><button class="mini addAct" data-id="${g.id}">＋</button></div><div class="progressrow"><span>${label}</span><b>${Math.round(p)}%</b></div><div class="progress"><i style="width:${p}%"></i></div><div class="rowbuttons"><button class="danger deleteGoal" data-id="${g.id}">Supprimer</button></div></div>`
-}
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)],DAY=86400000;
+const iso=d=>{let x=new Date(d);return `${x.getFullYear()}-${String(x.getMonth()+1).padStart(2,"0")}-${String(x.getDate()).padStart(2,"0")}`},today=()=>iso(new Date());
+const EM={sport:"🏃",maison:"🧹",sante:"❤️",perso:"🌱"};
+const SHARKS=[
+["Requin gris","Carcharhinus plumbeus","Commun",0,"🦈","Départ"],
+["Requin pointe noire","Carcharhinus melanopterus","Commun",350,"🦈","Boutique"],
+["Requin pointe blanche","Triaenodon obesus","Commun",450,"🦈","Boutique"],
+["Requin bleu","Prionace glauca","Commun",600,"🦈","Boutique"],
+["Requin nourrice","Ginglymostoma cirratum","Commun",700,"🦈","Boutique"],
+["Requin citron","Negaprion brevirostris","Commun",800,"🦈","Boutique"],
+["Requin corail","Carcharhinus amblyrhynchos","Commun",900,"🦈","Boutique"],
+["Requin zèbre","Stegostoma tigrinum","Rare",1400,"🦈","10 activités"],
+["Requin-renard","Alopias vulpinus","Rare",1800,"🦈","25 activités"],
+["Requin mako","Isurus oxyrinchus","Rare",2200,"🦈","Niveau 10"],
+["Requin bouledogue","Carcharhinus leucas","Rare",2600,"🦈","Boutique"],
+["Requin marteau","Sphyrna lewini","Rare",3000,"🔨","10 objectifs atteints"],
+["Requin-tapis","Orectolobus maculatus","Rare",3200,"🦈","Boutique"],
+["Requin-scie","Pristiophorus cirratus","Rare",3400,"🪚","Boutique"],
+["Requin-lutin","Mitsukurina owstoni","Épique",5000,"👺","50 activités"],
+["Requin-lézard","Chlamydoselachus anguineus","Épique",5500,"🐉","Boutique"],
+["Requin tigre","Galeocerdo cuvier","Épique",6000,"🐯","Niveau 20"],
+["Requin du Groenland","Somniosus microcephalus","Épique",6500,"🦈","100 activités"],
+["Requin griset","Hexanchus griseus","Épique",7000,"🦈","Boutique"],
+["Requin ange","Squatina squatina","Épique",7200,"🪽","Boutique"],
+["Grand marteau","Sphyrna mokarran","Légendaire",10000,"🔨","Niveau 30"],
+["Grand requin blanc","Carcharodon carcharias","Légendaire",12000,"🦈","Niveau 40"],
+["Requin pèlerin","Cetorhinus maximus","Légendaire",14000,"🦈","200 activités"],
+["Requin-baleine","Rhincodon typus","Légendaire",16000,"🐋","Niveau 50"],
+["Mégalodon","Otodus megalodon","Mythique",25000,"🦈","Collection ultime"]
+];
+const DEST=[["Récif corallien","🪸",250],["Pleine mer","🌊",500],["Mer tropicale","🏝️",800],["Océan arctique","❄️",1200],["Abysses","🌌",1800],["Fosse océanique","🕳️",2500]];
+const blank=()=>({version:3,xp:0,teeth:100,goals:[],activities:[],owned:["Requin gris"],activeShark:"Requin gris",affinity:{"Requin gris":0},expedition:null,completedExpeditions:0});
+let data=JSON.parse(localStorage.getItem("sharkHabitsV3")||"null")||blank(),weekOffset=0,filter="all",rarity="all";
+function save(){localStorage.setItem("sharkHabitsV3",JSON.stringify(data))}
+function monday(d=new Date()){d=new Date(d);let n=(d.getDay()+6)%7;d.setHours(0,0,0,0);d.setDate(d.getDate()-n);return d}
+function bounds(g,date=new Date()){let d=new Date(date),s,e;if(g.repeat==="day"){s=new Date(d);s.setHours(0,0,0,0);e=new Date(s.getTime()+DAY)}else if(g.repeat==="month"){s=new Date(d.getFullYear(),d.getMonth(),1);e=new Date(d.getFullYear(),d.getMonth()+1,1)}else{s=monday(d);e=new Date(s.getTime()+7*DAY)}return[s,e]}
+function actsFor(g){return data.activities.filter(a=>a.goal===g.id)}
+function valueFor(g,date=new Date()){let a=actsFor(g);if(g.type==="metric"){a=a.sort((x,y)=>x.date.localeCompare(y.date));return a.length?a[a.length-1].value:(g.baseline||0)}if(["long","once"].includes(g.type))return a.reduce((s,x)=>s+x.value,0);let[s,e]=bounds(g,date);return a.filter(x=>{let d=new Date(x.date+"T12:00");return d>=s&&d<e}).reduce((s,x)=>s+x.value,0)}
+function pct(g,v=valueFor(g)){if(g.type==="metric"){let total=Math.abs((g.baseline||v)-g.target),done=Math.abs((g.baseline||v)-v);return Math.max(0,Math.min(100,total?done/total*100:100))}return Math.min(100,g.target?v/g.target*100:0)}
+function achievedCount(){return data.goals.filter(g=>pct(g)>=100).length}
+function unlocked(s){let[n,latin,r,c,e,how]=s,lvl=Math.floor(data.xp/250)+1,a=data.activities.length,ac=achievedCount();return data.owned.includes(n)||how==="Départ"||(how==="10 activités"&&a>=10)||(how==="25 activités"&&a>=25)||(how==="50 activités"&&a>=50)||(how==="100 activités"&&a>=100)||(how==="200 activités"&&a>=200)||(how==="Niveau 10"&&lvl>=10)||(how==="Niveau 20"&&lvl>=20)||(how==="Niveau 30"&&lvl>=30)||(how==="Niveau 40"&&lvl>=40)||(how==="Niveau 50"&&lvl>=50)||(how==="10 objectifs atteints"&&ac>=10)}
+function syncUnlocks(){SHARKS.forEach(s=>{if(unlocked(s)&&!data.owned.includes(s[0])&&s[5]!=="Boutique"&&s[5]!=="Collection ultime")data.owned.push(s[0])})}
+function goalCard(g,date=new Date()){let v=valueFor(g,date),p=pct(g,v),rep=g.repeat==="week"?"Cette semaine":g.repeat==="month"?"Ce mois":g.repeat==="day"?"Aujourd'hui":g.type==="metric"?"Mesure":g.type==="long"?"Long terme":"Ponctuel";return `<div class="goalcard"><div class="goalTop"><span class="emoji">${EM[g.category]||"🎯"}</span><div class="goalName">${g.name}<div class="muted">${rep}</div></div><button class="mini addAct" data-id="${g.id}">＋</button></div><div class="progressrow"><span>${+v.toFixed(1)} ${g.unit||""} ${g.type==="metric"?"→ "+g.target+" "+(g.unit||""):"/ "+g.target+" "+(g.unit||"")}</span><b>${Math.round(p)}%</b></div><div class="progress"><i style="width:${p}%"></i></div><div class="rowbuttons"><button class="textbtn editGoal" data-id="${g.id}">Modifier</button><button class="textbtn archiveGoal" data-id="${g.id}">${g.archived?"Réactiver":"Archiver"}</button><button class="danger deleteGoal" data-id="${g.id}">Supprimer</button></div></div>`}
+function empty(msg,icon="🌊"){return `<div class="card empty"><div class="big">${icon}</div><b>${msg}</b></div>`}
 function render(){
- let lvl=Math.floor(data.xp/250)+1, rem=data.xp%250;
- $("#level").textContent="Niveau "+lvl;$("#xpText").textContent=`${rem} / 250 XP`;$("#xpBar").style.width=(rem/250*100)+"%";$("#teeth").textContent=data.teeth;
- $("#todayLabel").textContent=new Date().toLocaleDateString("fr-FR",{weekday:"long",day:"numeric",month:"long"});
- let current=data.goals.filter(g=>["habit","period"].includes(g.type));
- $("#todayList").innerHTML=current.map(g=>goalCard(g)).join("")||'<div class="card muted">Aucun objectif.</div>';
- $("#periodGoals").innerHTML=data.goals.filter(g=>["long","metric"].includes(g.type)).map(g=>goalCard(g)).join("");
- $("#goalList").innerHTML=data.goals.filter(g=>filter==="all"||g.category===filter).map(g=>goalCard(g)).join("");
- renderWeek(); renderStats(); renderShop(); bindDynamic(); populateActivity();
+ syncUnlocks();save();let lvl=Math.floor(data.xp/250)+1,rem=data.xp%250;$("#level").textContent="Niveau "+lvl;$("#xpText").textContent=`${rem} / 250 XP`;$("#xpBar").style.width=rem/250*100+"%";$("#teeth").textContent=data.teeth;
+ let shark=SHARKS.find(s=>s[0]===data.activeShark)||SHARKS[0];$("#heroShark").textContent=shark[4];$("#todayLabel").textContent=new Date().toLocaleDateString("fr-FR",{weekday:"long",day:"numeric",month:"long"});
+ let active=data.goals.filter(g=>!g.archived);$("#emptyWelcome").innerHTML=!active.length?`<div class="card empty"><div class="big">🦈</div><h2>Ton océan est prêt</h2><p class="muted">Aucun objectif n'est imposé. Crée ton premier objectif pour commencer.</p><button class="primary" onclick="openGoal()">＋ Créer mon premier objectif</button></div>`:"";
+ $("#todayList").innerHTML=active.filter(g=>["habit","period"].includes(g.type)).map(goalCard).join("")||empty("Aucune habitude active aujourd'hui","☀️");
+ $("#currentGoals").innerHTML=active.filter(g=>["long","metric","once"].includes(g.type)).map(goalCard).join("")||empty("Aucun objectif long terme","🎯");
+ $("#goalList").innerHTML=active.filter(g=>filter==="all"||g.category===filter).map(goalCard).join("")||empty("Aucun objectif dans cette catégorie","🎯");
+ $("#archivedList").innerHTML=data.goals.filter(g=>g.archived).map(goalCard).join("")||'<p class="muted">Aucun objectif archivé.</p>';
+ renderWeek();renderStats();renderDex();renderExpedition();bindDynamic();populateActivity()
 }
-function renderWeek(){
- let s=monday(new Date(Date.now()+weekOffset*7*DAY)); let e=new Date(s.getTime()+6*DAY);
- $("#weekTitle").textContent=`${s.toLocaleDateString("fr-FR",{day:"numeric",month:"short"})} – ${e.toLocaleDateString("fr-FR",{day:"numeric",month:"short",year:"numeric"})}`;
- $("#weekGrid").innerHTML=[0,1,2,3,4,5,6].map(i=>{let d=new Date(s.getTime()+i*DAY), ds=iso(d), acts=data.activities.filter(a=>a.date===ds);return `<div class="day ${ds===today()?"today":""}"><b>${["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"][i]}</b><div class="num">${d.getDate()}</div><div class="dots">${acts.slice(0,3).map(a=>emojis[(data.goals.find(g=>g.id===a.goal)||{}).category]||"•").join(" ")}</div></div>`}).join("");
- $("#weekGoals").innerHTML=data.goals.filter(g=>g.repeat==="week").map(g=>goalCard(g,s)).join("");
-}
-function drawLine(canvas,seriesA,seriesB){
- let c=canvas,ctx=c.getContext("2d"),w=c.width,h=c.height,p=35;ctx.clearRect(0,0,w,h);let vals=[...seriesA,...seriesB].filter(Number.isFinite),min=Math.min(...vals),max=Math.max(...vals);if(min===max){min-=1;max+=1}
- let pt=(v,i,n)=>[p+i*(w-2*p)/Math.max(1,n-1),h-p-(v-min)*(h-2*p)/(max-min)];
- ctx.strokeStyle="#dfe7e9";ctx.lineWidth=1;for(let i=0;i<5;i++){let y=p+i*(h-2*p)/4;ctx.beginPath();ctx.moveTo(p,y);ctx.lineTo(w-p,y);ctx.stroke()}
- [seriesB,seriesA].forEach((arr,j)=>{ctx.strokeStyle=j?"#0b7189":"#9ba8ac";ctx.lineWidth=j?4:2;ctx.setLineDash(j?[]:[8,6]);ctx.beginPath();arr.forEach((v,i)=>{let [x,y]=pt(v,i,arr.length);i?ctx.lineTo(x,y):ctx.moveTo(x,y)});ctx.stroke()});ctx.setLineDash([])
-}
-function renderStats(){
- let weekly=[...data.historyWeeks]; let thisWeek=data.goals.filter(g=>g.repeat==="week"); weekly[7]=thisWeek.length?thisWeek.reduce((s,g)=>s+pct(g),0)/thisWeek.length:0;
- drawLine($("#weeklyChart"),weekly,[100,100,100,100,100,100,100,100]);
- let metrics=data.goals.filter(g=>g.type==="metric"); $("#metricSelect").innerHTML=metrics.map(g=>`<option value="${g.id}">${g.name}</option>`).join("");
- let g=metrics[0]; if(g){let acts=data.activities.filter(a=>a.goal===g.id).sort((a,b)=>a.date.localeCompare(b.date));let real=[g.baseline,...acts.map(a=>a.value)];let target=real.map((_,i)=>g.baseline+(g.target-g.baseline)*(i/Math.max(1,real.length-1)));drawLine($("#metricChart"),real,target);let v=valueFor(g);$("#metricInsight").textContent=`Actuel : ${v} ${g.unit} · Cible : ${g.target} ${g.unit}. La ligne pointillée représente la trajectoire théorique.`}
- let total=data.activities.length,done=data.goals.filter(g=>pct(g)>=100).length;
- $("#statsSummary").innerHTML=`<div class="stat"><span class="muted">Activités</span><b>${total}</b></div><div class="stat"><span class="muted">Objectifs atteints</span><b>${done}</b></div><div class="stat"><span class="muted">XP total</span><b>${data.xp}</b></div><div class="stat"><span class="muted">Dents</span><b>${data.teeth}</b></div>`
-}
-const sharks=[["Requin gris",0,"🦈"],["Requin bleu",1500,"🦈"],["Requin marteau",4000,"🔨"],["Requin tigre",7500,"🦈"],["Grand blanc",15000,"🦈"],["Requin-baleine",25000,"🐋"]];
-function renderShop(){
- $("#activeShark").textContent=data.activeShark;
- $("#shop").innerHTML=sharks.map(([n,c,e])=>{let owned=data.owned.includes(n);return `<div class="shopitem"><div class="fish">${e}</div><b>${n}</b><p class="muted">${owned?"Débloqué":c+" 🦷"}</p><button class="primary small sharkBuy" data-name="${n}" data-cost="${c}">${owned?(data.activeShark===n?"Actif":"Choisir"):"Acheter"}</button></div>`}).join("");
- let achievements=[["Premiers pas",data.activities.length>=1],["Régulier",data.activities.length>=10],["Centurion",data.activities.length>=100],["Collectionneur",data.owned.length>=3]];
- $("#achievements").innerHTML=achievements.map(([n,ok])=>`<div class="goalcard">${ok?"🏆":"🔒"} <b>${n}</b></div>`).join("")
-}
-function populateActivity(){ $("#activityGoal").innerHTML=data.goals.map(g=>`<option value="${g.id}">${emojis[g.category]||"🎯"} ${g.name} (${g.unit})</option>`).join("")}
-function bindDynamic(){
- $$(".addAct").forEach(b=>b.onclick=()=>openActivity(b.dataset.id));
- $$(".deleteGoal").forEach(b=>b.onclick=()=>{if(confirm("Supprimer cet objectif ? Son historique d'activités sera conservé.")){data.goals=data.goals.filter(g=>g.id!==b.dataset.id);save();render()}});
- $$(".sharkBuy").forEach(b=>b.onclick=()=>{let n=b.dataset.name,c=+b.dataset.cost;if(data.owned.includes(n)){data.activeShark=n}else if(data.teeth>=c){data.teeth-=c;data.owned.push(n);data.activeShark=n}else return alert("Pas assez de dents !");save();render()})
-}
-function openActivity(id){$("#activityGoal").value=id;$("#activityForm").elements.date.value=today();$("#activityDialog").showModal()}
+function renderWeek(){let s=monday(new Date(Date.now()+weekOffset*7*DAY)),e=new Date(s.getTime()+6*DAY);$("#weekTitle").textContent=`${s.toLocaleDateString("fr-FR",{day:"numeric",month:"short"})} – ${e.toLocaleDateString("fr-FR",{day:"numeric",month:"short",year:"numeric"})}`;$("#weekGrid").innerHTML=[0,1,2,3,4,5,6].map(i=>{let d=new Date(s.getTime()+i*DAY),ds=iso(d),a=data.activities.filter(x=>x.date===ds);return `<div class="day ${ds===today()?"today":""}"><b>${["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"][i]}</b><div class="num">${d.getDate()}</div><div class="dots">${a.slice(0,4).map(x=>EM[(data.goals.find(g=>g.id===x.goal)||{}).category]||"•").join(" ")}</div></div>`}).join("");let gs=data.goals.filter(g=>!g.archived&&g.repeat==="week");$("#weekGoals").innerHTML=gs.map(g=>goalCard(g,s)).join("")||empty("Aucun objectif hebdomadaire","📅")}
+function draw(canvas,A,B=[]){let c=canvas,ctx=c.getContext("2d"),w=c.width,h=c.height,p=36;ctx.clearRect(0,0,w,h);let vals=[...A,...B].filter(Number.isFinite);if(!vals.length)return;let mn=Math.min(...vals),mx=Math.max(...vals);if(mn===mx){mn-=1;mx+=1}let pt=(v,i,n)=>[p+i*(w-2*p)/Math.max(1,n-1),h-p-(v-mn)*(h-2*p)/(mx-mn)];ctx.strokeStyle="#dfe8ea";for(let i=0;i<5;i++){let y=p+i*(h-2*p)/4;ctx.beginPath();ctx.moveTo(p,y);ctx.lineTo(w-p,y);ctx.stroke()}[B,A].forEach((arr,j)=>{if(!arr.length)return;ctx.strokeStyle=j?"#0b7189":"#9aa8ac";ctx.lineWidth=j?4:2;ctx.setLineDash(j?[]:[8,6]);ctx.beginPath();arr.forEach((v,i)=>{let[x,y]=pt(v,i,arr.length);i?ctx.lineTo(x,y):ctx.moveTo(x,y)});ctx.stroke()});ctx.setLineDash([])}
+function renderStats(){let weeks=[];for(let k=7;k>=0;k--){let d=new Date(Date.now()-k*7*DAY),gs=data.goals.filter(g=>!g.archived&&g.repeat==="week");weeks.push(gs.length?gs.reduce((s,g)=>s+pct(g,valueFor(g,d)),0)/gs.length:0)}draw($("#weeklyChart"),weeks,[100,100,100,100,100,100,100,100]);let gs=data.goals.filter(g=>!g.archived);$("#analysisSelect").innerHTML=gs.map(g=>`<option value="${g.id}">${g.name}</option>`).join("");let g=gs[0];if(g){let acts=actsFor(g).sort((a,b)=>a.date.localeCompare(b.date)),real=g.type==="metric"?[g.baseline||0,...acts.map(a=>a.value)]:acts.map((a,i)=>acts.slice(0,i+1).reduce((s,x)=>s+x.value,0));if(!real.length)real=[0];let target=real.map((_,i)=>g.type==="metric"?(g.baseline||0)+(g.target-(g.baseline||0))*i/Math.max(1,real.length-1):g.target*i/Math.max(1,real.length-1));draw($("#analysisChart"),real,target);let v=valueFor(g);$("#analysisInsight").textContent=`${g.name} : ${+v.toFixed(1)} ${g.unit||""}. Cible : ${g.target} ${g.unit||""}. La ligne pointillée représente la trajectoire cible.`}else{$("#analysisInsight").textContent="Crée un objectif pour afficher son analyse.";draw($("#analysisChart"),[])}$("#statsSummary").innerHTML=`<div class="stat"><span class="muted">Activités</span><b>${data.activities.length}</b></div><div class="stat"><span class="muted">Objectifs atteints</span><b>${achievedCount()}</b></div><div class="stat"><span class="muted">XP</span><b>${data.xp}</b></div><div class="stat"><span class="muted">Expéditions</span><b>${data.completedExpeditions||0}</b></div>`}
+function renderDex(){let owned=SHARKS.filter(s=>data.owned.includes(s[0])).length;$("#dexCount").textContent=`${owned} / ${SHARKS.length}`;let active=SHARKS.find(s=>s[0]===data.activeShark)||SHARKS[0];$("#activeEmoji").textContent=active[4];$("#activeShark").textContent=active[0];$("#affinity").textContent=`Affinité : ${data.affinity?.[active[0]]||0} XP`;$("#sharkGrid").innerHTML=SHARKS.filter(s=>rarity==="all"||s[2]===rarity).map(s=>{let[n,latin,r,c,e,how]=s,own=data.owned.includes(n),can=unlocked(s),buy=how==="Boutique";return `<div class="shopitem ${own||can?"":"locked"}"><div class="fish">${own||can?e:"❓"}</div><div class="rarity">${r}</div><b>${own||can?n:"Espèce inconnue"}</b><p class="muted">${own?latin:"Indice : "+how}</p>${own?`<button class="primary small chooseShark" data-name="${n}">${data.activeShark===n?"Actif":"Choisir"}</button>`:buy?`<button class="primary small buyShark" data-name="${n}" data-cost="${c}">${c} 🦷</button>`:can?`<button class="primary small claimShark" data-name="${n}">Débloquer</button>`:""}</div>`}).join("");let ach=[["Première nage",data.activities.length>=1],["10 activités",data.activities.length>=10],["100 activités",data.activities.length>=100],["Premier objectif",achievedCount()>=1],["Collectionneur",owned>=10],["Explorateur",(data.completedExpeditions||0)>=1]];$("#achievements").innerHTML=ach.map(([n,ok])=>`<div class="goalcard achievement"><span>${ok?"🏆":"🔒"}</span><b>${n}</b></div>`).join("")}
+function renderExpedition(){let ex=data.expedition;if(ex){let dest=DEST[ex.dest],p=Math.min(100,ex.progress/dest[2]*100);$("#expeditionBox").innerHTML=`<div class="card expedition"><h2>${dest[1]} ${dest[0]}</h2><p>Ton ${data.activeShark} explore cette zone grâce à tes activités.</p><div class="progress"><i style="width:${p}%"></i></div><p>${ex.progress} / ${dest[2]} XP d'expédition</p>${p>=100?'<button class="primary wide finishExp">Récupérer la récompense</button>':""}</div>`}else $("#expeditionBox").innerHTML=empty("Choisis une destination. Chaque activité fera avancer ton requin.","🧭");$("#destinations").innerHTML=DEST.map((d,i)=>`<div class="goalcard destination"><div class="place">${d[1]}</div><div class="goalName">${d[0]}<div class="muted">${d[2]} XP nécessaires</div></div><button class="primary small startExp" data-i="${i}" ${ex?"disabled":""}>Partir</button></div>`).join("")}
+function populateActivity(){let gs=data.goals.filter(g=>!g.archived);$("#activityGoal").innerHTML=gs.map(g=>`<option value="${g.id}">${EM[g.category]||"🎯"} ${g.name}</option>`).join("")}
+function bindDynamic(){$$(".addAct").forEach(b=>b.onclick=()=>openActivity(b.dataset.id));$$(".editGoal").forEach(b=>b.onclick=()=>openGoal(b.dataset.id));$$(".archiveGoal").forEach(b=>b.onclick=()=>{let g=data.goals.find(x=>x.id===b.dataset.id);g.archived=!g.archived;save();render()});$$(".deleteGoal").forEach(b=>b.onclick=()=>{if(confirm("Supprimer cet objectif et ses activités ?")){data.goals=data.goals.filter(g=>g.id!==b.dataset.id);data.activities=data.activities.filter(a=>a.goal!==b.dataset.id);recalcRewards();save();render()}});$$(".chooseShark").forEach(b=>b.onclick=()=>{data.activeShark=b.dataset.name;save();render()});$$(".buyShark").forEach(b=>b.onclick=()=>{let c=+b.dataset.cost;if(data.teeth<c)return alert("Pas assez de dents.");data.teeth-=c;data.owned.push(b.dataset.name);data.affinity[b.dataset.name]=0;save();render()});$$(".claimShark").forEach(b=>b.onclick=()=>{if(!data.owned.includes(b.dataset.name))data.owned.push(b.dataset.name);save();render()});$$(".startExp").forEach(b=>b.onclick=()=>{data.expedition={dest:+b.dataset.i,progress:0};save();render()});let f=$(".finishExp");if(f)f.onclick=()=>{data.teeth+=250+(data.expedition.dest*75);data.completedExpeditions=(data.completedExpeditions||0)+1;data.expedition=null;save();render();alert("Expédition terminée ! Récompense ajoutée 🦷")}}
+function openGoal(id=""){let f=$("#goalForm");f.reset();f.elements.id.value=id;f.elements.start.value=today();$("#goalDialogTitle").textContent=id?"Modifier l'objectif":"Nouvel objectif";if(id){let g=data.goals.find(x=>x.id===id);Object.keys(g).forEach(k=>{if(f.elements[k]){if(f.elements[k].type==="checkbox")f.elements[k].checked=!!g[k];else f.elements[k].value=g[k]??""}})}$("#goalDialog").showModal()}
+function openActivity(id){if(!data.goals.filter(g=>!g.archived).length)return alert("Crée d'abord un objectif.");let f=$("#activityForm");f.reset();populateActivity();f.elements.goal.value=id||data.goals.find(g=>!g.archived)?.id;f.elements.date.value=today();$("#activityDialog").showModal()}
+function recalcRewards(){data.xp=data.activities.reduce((s,a)=>s+(a.rewardXP||10),0);data.teeth=Math.max(0,100+data.activities.reduce((s,a)=>s+(a.rewardTeeth||3),0))}
+$("#goalForm").onsubmit=e=>{e.preventDefault();let f=new FormData(e.target),id=f.get("id"),obj={id:id||"g"+Date.now(),name:f.get("name"),category:f.get("category"),type:f.get("type"),target:+f.get("target"),unit:f.get("unit"),repeat:f.get("repeat"),start:f.get("start"),end:f.get("end"),baseline:+f.get("baseline")||0,flexible:!!f.get("flexible"),archived:false};if(id){let old=data.goals.find(g=>g.id===id);Object.assign(old,obj)}else data.goals.push(obj);save();$("#goalDialog").close();render()};
+$("#activityForm").onsubmit=e=>{e.preventDefault();let f=new FormData(e.target),v=+f.get("value"),xp=Math.max(10,Math.min(100,Math.round(Math.abs(v)*10))),teeth=Math.max(3,Math.min(25,Math.round(Math.abs(v)*2)));data.activities.push({id:"a"+Date.now(),goal:f.get("goal"),value:v,date:f.get("date"),duration:+f.get("duration")||0,note:f.get("note"),rewardXP:xp,rewardTeeth:teeth});data.xp+=xp;data.teeth+=teeth;data.affinity=data.affinity||{};data.affinity[data.activeShark]=(data.affinity[data.activeShark]||0)+xp;if(data.expedition)data.expedition.progress+=xp;save();$("#activityDialog").close();render()};
 $$("nav button").forEach(b=>b.onclick=()=>{$$("nav button").forEach(x=>x.classList.remove("active"));b.classList.add("active");$$(".page").forEach(x=>x.classList.remove("active"));$("#"+b.dataset.page).classList.add("active");render()});
-$("#newGoal").onclick=()=>{let f=$("#goalForm");f.elements.start.value=today();f.elements.end.value="";$("#goalDialog").showModal()};
-$("#quickAdd").onclick=()=>openActivity(data.goals[0]?.id);
-$("#goalForm").onsubmit=e=>{e.preventDefault();let f=new FormData(e.target);data.goals.push({id:"g"+Date.now(),name:f.get("name"),category:f.get("category"),type:f.get("type"),target:+f.get("target"),unit:f.get("unit"),repeat:f.get("repeat"),start:f.get("start"),end:f.get("end"),flexible:!!f.get("flexible"),baseline:+f.get("target")});save();$("#goalDialog").close();e.target.reset();render()};
-$("#activityForm").onsubmit=e=>{e.preventDefault();let f=new FormData(e.target),v=+f.get("value");data.activities.push({goal:f.get("goal"),value:v,date:f.get("date")});data.xp+=Math.max(10,Math.round(v*10));data.teeth+=Math.max(3,Math.round(v*2));save();$("#activityDialog").close();render()};
-$("#prevWeek").onclick=()=>{weekOffset--;renderWeek()};$("#nextWeek").onclick=()=>{weekOffset++;renderWeek()};
-$$(".chip").forEach(c=>c.onclick=()=>{$$(".chip").forEach(x=>x.classList.remove("active"));c.classList.add("active");filter=c.dataset.filter;render()});
-if("serviceWorker" in navigator)navigator.serviceWorker.register("./sw.js");
-render();
+$("#newGoal").onclick=()=>openGoal();$("#quickAdd").onclick=()=>openActivity();$("#settingsBtn").onclick=()=>$("#settingsDialog").showModal();$("#prevWeek").onclick=()=>{weekOffset--;renderWeek()};$("#nextWeek").onclick=()=>{weekOffset++;renderWeek()};
+$$(".chip[data-filter]").forEach(c=>c.onclick=()=>{$$(".chip[data-filter]").forEach(x=>x.classList.remove("active"));c.classList.add("active");filter=c.dataset.filter;render()});$$(".dexfilter").forEach(c=>c.onclick=()=>{$$(".dexfilter").forEach(x=>x.classList.remove("active"));c.classList.add("active");rarity=c.dataset.rarity;renderDex();bindDynamic()});
+$("#analysisSelect").onchange=e=>{let g=data.goals.find(x=>x.id===e.target.value);if(!g)return;let a=actsFor(g).sort((x,y)=>x.date.localeCompare(y.date)),r=g.type==="metric"?[g.baseline||0,...a.map(x=>x.value)]:a.map((x,i)=>a.slice(0,i+1).reduce((s,y)=>s+y.value,0));if(!r.length)r=[0];let t=r.map((_,i)=>g.type==="metric"?(g.baseline||0)+(g.target-(g.baseline||0))*i/Math.max(1,r.length-1):g.target*i/Math.max(1,r.length-1));draw($("#analysisChart"),r,t);$("#analysisInsight").textContent=`${g.name} : ${+valueFor(g).toFixed(1)} ${g.unit||""} pour une cible de ${g.target} ${g.unit||""}.`};
+$("#exportBtn").onclick=()=>{let blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`sharkhabits-v3-backup-${today()}.json`;a.click();URL.revokeObjectURL(a.href)};
+$("#importFile").onchange=async e=>{try{let d=JSON.parse(await e.target.files[0].text());if(!d.goals||!d.activities)throw 0;data=d;save();$("#settingsDialog").close();render();alert("Sauvegarde restaurée.")}catch{alert("Fichier de sauvegarde invalide.")}};
+$("#resetBtn").onclick=()=>{if(confirm("Tout effacer ? Cette action est irréversible sauf si tu as exporté une sauvegarde.")){data=blank();save();$("#settingsDialog").close();render()}};
+if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js");render();
