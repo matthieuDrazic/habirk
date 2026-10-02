@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+  <meta name="theme-color" content="#062b3a"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <title>SharkHabits V2</title>
+  <link rel="manifest" href="./manifest.json"/>
+  <link rel="stylesheet" href="./style.css"/>
+</head>
+<body>
+<header>
+  <div><small>SHARK HABITS</small><h1 id="hello">Mon océan</h1></div>
+  <button class="icon" id="settingsBtn">⚙️</button>
+</header>
+
+<main>
+<section id="home" class="page active">
+  <div class="ocean card">
+    <div class="bubbles">◦　○　　　◦　○</div>
+    <div id="shark" class="shark">🦈</div>
+    <div class="reef">🪸　🐠　🌿　🐟　🪸</div>
+    <div class="level"><b id="level">Niveau 1</b><span id="xpText">0 / 250 XP</span></div>
+    <div class="bar"><i id="xpBar"></i></div>
+    <div class="wallet">🦷 <b id="teeth">0</b></div>
+  </div>
+  <div class="sectionTitle"><h2>Aujourd'hui</h2><span id="todayLabel"></span></div>
+  <div id="todayList"></div>
+  <button class="primary wide" id="quickAdd">＋ Enregistrer une activité</button>
+  <div class="sectionTitle"><h2>En cours</h2></div>
+  <div id="periodGoals"></div>
+</section>
+
+<section id="plan" class="page">
+  <div class="sectionTitle"><h2>Planning</h2><button class="mini" id="prevWeek">‹</button><button class="mini" id="nextWeek">›</button></div>
+  <div id="weekTitle" class="muted"></div>
+  <div id="weekGrid" class="weekgrid"></div>
+  <div class="sectionTitle"><h2>Objectifs de la semaine</h2></div>
+  <div id="weekGoals"></div>
+</section>
+
+<section id="goals" class="page">
+  <div class="sectionTitle"><h2>Mes objectifs</h2><button class="primary small" id="newGoal">＋ Ajouter</button></div>
+  <div class="chips" id="filters">
+    <button class="chip active" data-filter="all">Tous</button>
+    <button class="chip" data-filter="sport">Sport</button>
+    <button class="chip" data-filter="maison">Maison</button>
+    <button class="chip" data-filter="sante">Santé</button>
+    <button class="chip" data-filter="perso">Perso</button>
+  </div>
+  <div id="goalList"></div>
+</section>
+
+<section id="stats" class="page">
+  <h2>Progression</h2>
+  <div class="card"><h3>Régularité – 8 semaines</h3><canvas id="weeklyChart" width="700" height="280"></canvas></div>
+  <div class="card"><h3>Objectif mesuré</h3><select id="metricSelect"></select><canvas id="metricChart" width="700" height="330"></canvas><div id="metricInsight" class="insight"></div></div>
+  <div class="card"><h3>Résumé</h3><div id="statsSummary" class="statsgrid"></div></div>
+</section>
+
+<section id="collection" class="page">
+  <h2>Collection</h2>
+  <div class="card center"><div class="bigshark">🦈</div><h3 id="activeShark">Requin gris</h3><p class="muted">Ton compagnon actuel</p></div>
+  <h3>Requins</h3><div id="shop" class="shop"></div>
+  <h3>Succès</h3><div id="achievements"></div>
+</section>
+</main>
+
+<nav>
+ <button data-page="home" class="active"><span>🌊</span>Océan</button>
+ <button data-page="plan"><span>📅</span>Planning</button>
+ <button data-page="goals"><span>🎯</span>Objectifs</button>
+ <button data-page="stats"><span>📊</span>Stats</button>
+ <button data-page="collection"><span>🦈</span>Collection</button>
+</nav>
+
+<dialog id="goalDialog">
+<form method="dialog" id="goalForm">
+ <div class="modalHead"><h2>Nouvel objectif</h2><button value="cancel" class="icon">✕</button></div>
+ <label>Nom<input required name="name" placeholder="Ex. Courir 10 km"/></label>
+ <label>Catégorie<select name="category"><option value="sport">🏃 Sport</option><option value="maison">🏠 Maison</option><option value="sante">❤️ Santé</option><option value="perso">🌱 Personnel</option></select></label>
+ <label>Type<select name="type" id="goalType"><option value="period">Objectif renouvelable</option><option value="habit">Habitude / fréquence</option><option value="long">Objectif longue durée</option><option value="metric">Mesure évolutive</option><option value="once">Objectif ponctuel</option></select></label>
+ <div class="two"><label>Valeur cible<input name="target" type="number" step="0.1" value="10"/></label><label>Unité<input name="unit" value="km"/></label></div>
+ <label id="repeatWrap">Répétition<select name="repeat"><option value="week">Chaque semaine</option><option value="month">Chaque mois</option><option value="day">Chaque jour</option></select></label>
+ <div class="two"><label>Date de début<input name="start" type="date"/></label><label>Échéance<input name="end" type="date"/></label></div>
+ <label class="check"><input name="flexible" type="checkbox" checked/> Planning flexible</label>
+ <button class="primary wide" value="default">Créer l'objectif</button>
+</form>
+</dialog>
+
+<dialog id="activityDialog">
+<form method="dialog" id="activityForm">
+ <div class="modalHead"><h2>Enregistrer</h2><button value="cancel" class="icon">✕</button></div>
+ <label>Objectif<select name="goal" id="activityGoal"></select></label>
+ <label>Valeur<input name="value" type="number" step="0.1" value="1" required/></label>
+ <label>Date<input name="date" type="date" required/></label>
+ <button class="primary wide" value="default">Valider + gagner de l'XP</button>
+</form>
+</dialog>
+
+<script src="./app.js"></script>
+</body>
+</html>
