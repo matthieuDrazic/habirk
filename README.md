@@ -1,7 +1,5 @@
-# SharkHabits V15.0 — Clean Rebuild
+# SharkHabits V15.2 — Dark Refined
 
-V15 reconstruit entièrement le HTML, le CSS, le JavaScript et le service worker. Aucun code V14 n’est repris. Seuls les assets visuels (requins/décorations/icon) sont conservés.
+Refonte visuelle premium sur la base stable V15.1 : interface sombre plus proche d’une app iOS, cartes plus discrètes, rapport hebdomadaire enrichi, fiches plus lisibles et aquarium plein écran immersif.
 
-Fonctions : page Aujourd’hui avec semaine cliquable, habitudes/cumul/mesures/objectifs à échéance, Rapports et rythme attendu, fiche détaillée + historique + courbe, aquarium plein écran cliquable, Sharkdex, boutique, dents, thème sombre iOS.
-
-Important : V15 utilise une nouvelle clé de données `sharkHabitsV15` afin qu’un ancien état V14 défectueux ne puisse pas casser la nouvelle architecture.
+Le moteur V15.1 est conservé : requin gris starter, 26 espèces dont Mégalodon, prix explicites, +/−, rapports fonctionnels, inventaire et migrations.
