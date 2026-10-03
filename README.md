@@ -1,14 +1,13 @@
-# SharkHabits V11.0 — Progress Fix
+# SharkHabits V12.0
 
-V11 corrige le calcul des objectifs chiffrés lorsque la valeur de départ est 0.
-
-Exemple :
-- objectif hebdomadaire : 10 km
-- réalisé : 3,5 km
-- progression attendue : 35 %
-
-Le bug venait d'un fallback JavaScript avec `||` : une valeur de départ égale à 0 était considérée comme absente.
-V11 utilise une gestion explicite du zéro et conserve les données V10.
-
-Version visible : V11.0
-Cache : sharkhabits-v11.0.0-progress-fix
+- Vue Suivi simplifiée : Jour + Tous, suppression de l'onglet Semaine.
+- Bandeau lundi→dimanche cliquable, avec navigation semaine précédente/suivante.
+- Les habitudes de fréquence s'incrémentent directement de +1 sur le jour sélectionné.
+- Les objectifs cumulés enregistrent la quantité du jour et additionnent automatiquement le total de la période.
+- Possibilité de choisir les jours prévus lors de la création/modification d'un suivi.
+- Tous les requins sont désormais achetables uniquement avec des dents : plus de déblocage par niveau/objectif.
+- Le niveau disparaît du HUD : seules les dents restent.
+- Ajout de poissons et tortues achetables comme décorations.
+- Suppression de l'effet de flou/brume artificielle sur l'océan.
+- Migration automatique des données V11.
+- Cache : sharkhabits-v12.0.0-daily-journal.

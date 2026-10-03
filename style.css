@@ -470,3 +470,18 @@ clip-path:none!important;mask:none!important;background:transparent!important;pa
 #sharkGrid .item img,#shopGrid .item img{height:138px!important}
 .detailHero img{height:290px!important}
 .sharkSprite{object-fit:contain!important;object-position:center!important;clip-path:none!important;mask:none!important}
+
+/* V12 — daily journal + clean ocean */
+.weekNavigator{display:grid;grid-template-columns:34px repeat(7,1fr) 34px;gap:4px;margin:8px 0 12px;align-items:center}
+.dayPick,.weekArrow{border:0;background:#fff;border-radius:13px;min-height:54px;color:#61737b;font-weight:700;box-shadow:0 2px 8px rgba(0,30,40,.04)}
+.dayPick span{display:block;font-size:10px;text-transform:capitalize}.dayPick b{display:block;font-size:16px;margin-top:3px}
+.dayPick.selected{background:#078aa2;color:#fff}.dayPick.isToday:not(.selected){outline:1.5px solid #20a9bd;color:#087c91}
+.weekArrow{font-size:24px}.weekdayChecks{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-top:7px}
+.weekdayChecks label{margin:0;text-align:center;font-size:10px;background:#eef4f5;border-radius:10px;padding:7px 2px}.weekdayChecks input{width:auto;margin:0 0 4px;display:block;margin-inline:auto}
+.teethOnly{justify-content:flex-end!important}.teethOnly span{font-size:15px}
+/* Remove the artificial fog/blur overlay from the ocean itself. */
+.ocean,.aqCanvas{filter:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+.ocean:after,.aqCanvas:after{background:linear-gradient(180deg,transparent 70%,rgba(0,23,36,.12))!important;opacity:1!important}
+.sunray{filter:none!important;opacity:.28!important}
+#homeDecor img,#aqDecor img{filter:drop-shadow(0 6px 6px rgba(0,20,25,.25))!important}
+@media(max-width:430px){.weekNavigator{grid-template-columns:28px repeat(7,1fr) 28px;gap:2px}.dayPick,.weekArrow{min-height:50px;border-radius:11px}.dayPick b{font-size:14px}}
