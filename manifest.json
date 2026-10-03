@@ -1,11 +1,11 @@
 {
-  "name": "SharkHabits V5",
+  "name": "SharkHabits V6 — Living Ocean",
   "short_name": "SharkHabits",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "background_color": "#edf4f5",
-  "theme_color": "#03283a",
+  "theme_color": "#061e2b",
   "icons": [
     {
       "src": "icon.svg",
