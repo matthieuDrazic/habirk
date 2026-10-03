@@ -442,3 +442,14 @@ nav button.active{font-weight:750!important}
 
 /* Cards closer to the V8.1 reference */
 .stat,.goalcard,.item{box-shadow:0 3px 14px rgba(18,58,69,.055)!important}
+
+/* V9.0 FULL SHARK GUARANTEE */
+#sharkGrid .item img,#shopGrid .item img,.manageCheck img,.detailHero img{
+display:block!important;width:100%!important;max-width:100%!important;height:128px!important;
+object-fit:contain!important;object-position:center!important;transform:none!important;
+clip-path:none!important;mask:none!important;padding:0!important;margin:0 auto 5px!important;background:transparent!important}
+.detailHero img{height:260px!important}
+.sharkSprite{object-fit:contain!important;object-position:center!important;clip-path:none!important;mask:none!important}
+#homeSharks .sharkSprite{width:26%!important;height:auto!important}
+#aqSharks .sharkSprite{width:29%!important;height:auto!important}
+@media(max-width:430px){#sharkGrid .item img,#shopGrid .item img{height:116px!important}}

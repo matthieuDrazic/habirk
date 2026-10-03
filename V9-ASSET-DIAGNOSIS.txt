@@ -1,0 +1,7 @@
+ERREUR TROUVEE
+
+Les anciens requins ont ete extraits/recadres depuis une grande planche graphique. Certains PNG sont donc deja amputes dans leur bitmap. object-fit: contain ne peut afficher que les pixels presents.
+
+V9 supprime tout recadrage supplementaire cote application et place chaque bitmap entier sur un canevas transparent.
+
+Assets touchant une bordure source avant normalisation: 0/25
