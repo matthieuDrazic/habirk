@@ -19,3 +19,11 @@ Tous les fichiers sont à déposer directement à la racine de `main`. Aucun dos
 Cache : `sharkhabits-v7.0.0-style-e`.
 
 `V7-style-reference.png` est la planche de référence graphique utilisée pour cette version.
+
+
+## V7.1
+- Suppression des libellés intégrés au bas des illustrations.
+- Assets légèrement simplifiés, plus contrastés et plus lisibles sur mobile.
+- Images de boutique cadrées en entier avec marge de sécurité.
+- Menu « Requins dans l’aquarium » : X + bouton Terminé + fermeture en touchant l’arrière-plan.
+- Cache : `sharkhabits-v7.1.0-style-e-clean`.
