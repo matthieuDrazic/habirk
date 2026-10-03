@@ -485,3 +485,10 @@ clip-path:none!important;mask:none!important;background:transparent!important;pa
 .sunray{filter:none!important;opacity:.28!important}
 #homeDecor img,#aqDecor img{filter:drop-shadow(0 6px 6px rgba(0,20,25,.25))!important}
 @media(max-width:430px){.weekNavigator{grid-template-columns:28px repeat(7,1fr) 28px;gap:2px}.dayPick,.weekArrow{min-height:50px;border-radius:11px}.dayPick b{font-size:14px}}
+
+/* V12.1 — additive +/- controls */
+.stepper{display:flex;gap:7px;align-items:center}
+.stepBtn{width:38px;height:38px;border-radius:12px;border:1px solid #dce8ea;font-size:23px;font-weight:700;display:grid;place-items:center;line-height:1}
+.stepBtn.minus{background:#fff;color:#65777f}
+.stepBtn.plus{background:#078aa2;color:#fff;border-color:#078aa2}
+.stepBtn:active{transform:scale(.94)}

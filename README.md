@@ -1,13 +1,12 @@
-# SharkHabits V12.0
+# SharkHabits V12.1
 
-- Vue Suivi simplifiée : Jour + Tous, suppression de l'onglet Semaine.
-- Bandeau lundi→dimanche cliquable, avec navigation semaine précédente/suivante.
-- Les habitudes de fréquence s'incrémentent directement de +1 sur le jour sélectionné.
-- Les objectifs cumulés enregistrent la quantité du jour et additionnent automatiquement le total de la période.
-- Possibilité de choisir les jours prévus lors de la création/modification d'un suivi.
-- Tous les requins sont désormais achetables uniquement avec des dents : plus de déblocage par niveau/objectif.
-- Le niveau disparaît du HUD : seules les dents restent.
-- Ajout de poissons et tortues achetables comme décorations.
-- Suppression de l'effet de flou/brume artificielle sur l'océan.
-- Migration automatique des données V11.
-- Cache : sharkhabits-v12.0.0-daily-journal.
+- Les saisies d'objectifs cumulés sont maintenant des AJOUTS.
+  Exemple : 3,5 km déjà enregistrés + saisie de 6 km = 9,5 km.
+- Boutons − et + directement sur chaque suivi.
+- Habitude : + ajoute 1 occurrence, − retire 1 occurrence.
+- Cumul : + demande combien ajouter, − demande combien retirer.
+- Une correction ne peut jamais faire descendre le total de la période sous 0.
+- Les écritures restent attachées au jour sélectionné.
+- Migration automatique V12 → V12.1.
+- Version visible : V12.1.
+- Cache : sharkhabits-v12.1.0-add-subtract.
