@@ -453,3 +453,20 @@ clip-path:none!important;mask:none!important;padding:0!important;margin:0 auto 5
 #homeSharks .sharkSprite{width:26%!important;height:auto!important}
 #aqSharks .sharkSprite{width:29%!important;height:auto!important}
 @media(max-width:430px){#sharkGrid .item img,#shopGrid .item img{height:116px!important}}
+
+/* V9.1 ASSET RESET — images are complete transparent canvases */
+#sharkGrid .item img,#shopGrid .item img,.manageCheck img,.detailHero img{
+object-fit:contain!important;object-position:center!important;transform:none!important;
+clip-path:none!important;mask:none!important;background:transparent!important;padding:0!important}
+#sharkGrid .item img,#shopGrid .item img{height:135px!important}
+.detailHero img{height:280px!important}
+.sharkSprite{object-fit:contain!important;object-position:center!important;clip-path:none!important;mask:none!important}
+
+/* V10 — UNIQUE FULL SHARK ASSETS */
+#sharkGrid .item img,#shopGrid .item img,.manageCheck img,.detailHero img{
+display:block!important;width:100%!important;max-width:100%!important;
+object-fit:contain!important;object-position:center!important;transform:none!important;
+clip-path:none!important;mask:none!important;background:transparent!important;padding:0!important}
+#sharkGrid .item img,#shopGrid .item img{height:138px!important}
+.detailHero img{height:290px!important}
+.sharkSprite{object-fit:contain!important;object-position:center!important;clip-path:none!important;mask:none!important}
