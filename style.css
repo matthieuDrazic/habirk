@@ -497,3 +497,8 @@ clip-path:none!important;mask:none!important;background:transparent!important;pa
 nav{z-index:10000!important;pointer-events:auto!important}
 nav button{z-index:10001!important;pointer-events:auto!important;touch-action:manipulation!important}
 dialog:not([open]){pointer-events:none!important}
+
+/* V13.2: navigation physically isolated from page overlays */
+nav{position:fixed!important;inset:auto 0 0 0!important;z-index:2147483647!important;pointer-events:auto!important}
+nav button{pointer-events:auto!important;touch-action:manipulation!important;-webkit-tap-highlight-color:transparent}
+main>.page{pointer-events:auto}
