@@ -120,3 +120,42 @@ input,select,textarea{border-radius:13px;border:1px solid rgba(60,60,67,.16);bac
  h1{font-size:30px}
 }
 \n/* V7.3 — corrected shark framing */\n.item img,#sharkGrid .item img,#shopGrid .item img{\n  width:100%!important;height:138px!important;object-fit:contain!important;object-position:center!important;\n  transform:none!important;padding:0!important;margin:0 auto 8px!important;\n}\n.sharkSprite{object-fit:contain!important;transform-origin:center center;}\n#homeSharks .sharkSprite{min-width:112px;}\n#aqSharks .sharkSprite{min-width:145px;}\n@media(max-width:430px){\n .item img,#sharkGrid .item img,#shopGrid .item img{height:126px!important}\n #homeSharks .sharkSprite{min-width:105px}\n}\n
+/* V7.4 — Full Asset Safety
+   Never crop a purchasable visual. Whole asset > maximum card fill. */
+.item,.manageCheck,.ocean,.aqCanvas{overflow:hidden}
+.item img,#sharkGrid .item img,#shopGrid .item img,.manageCheck img{
+ object-fit:contain!important;
+ object-position:center!important;
+ transform:none!important;
+ max-width:100%!important;
+}
+#sharkGrid .item img,#shopGrid .item img{
+ width:100%!important;
+ height:128px!important;
+ padding:8px 10px!important;
+ box-sizing:border-box!important;
+}
+.manageCheck img{
+ width:100%!important;
+ height:104px!important;
+ padding:8px!important;
+ box-sizing:border-box!important;
+}
+.sharkSprite{
+ object-fit:contain!important;
+ object-position:center!important;
+ transform:none;
+ max-width:none!important;
+}
+.decorSprite{
+ object-fit:contain!important;
+ object-position:center!important;
+}
+/* Deliberately smaller aquarium sharks so the complete illustration remains visible. */
+#homeSharks .sharkSprite{width:24%!important;height:auto!important}
+#aqSharks .sharkSprite{width:28%!important;height:auto!important}
+@media(max-width:430px){
+ #sharkGrid .item img,#shopGrid .item img{height:112px!important;padding:9px 11px!important}
+ #homeSharks .sharkSprite{width:22%!important}
+ #aqSharks .sharkSprite{width:26%!important}
+}
