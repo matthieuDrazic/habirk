@@ -1,17 +1,17 @@
-# SharkHabits V8.0
+# SharkHabits V8.1
 
-Cette version transpose la direction artistique de la maquette V8 dans l'application :
-- interface blanche/teal très épurée façon iOS ;
-- aquarium beaucoup plus visuel ;
-- cartes, filtres, boutons et navigation redessinés ;
-- Sharkdex et boutique harmonisés ;
-- requins et décorations affichés avec `object-fit: contain` ;
+V8.1 rapproche l'application de la maquette validée :
+- en-têtes secondaires compacts ;
+- version V8.1 toujours visible ;
+- boutique et Sharkdex plus denses ;
+- visuels plus grands dans les cartes ;
+- cadenas plus discrets ;
+- boutons et filtres simplifiés ;
+- navigation basse plus sobre ;
 - aquarium plein écran conservé ;
-- suivi, statistiques, collection et boutique conservés ;
-- migration automatique des données V7 vers V8 au premier lancement ;
-- version **V8.0** visible dans l'interface.
+- migration des données V8 vers V8.1.
 
-Tous les fichiers sont à déposer directement à la racine de `main`.
-Cache : `sharkhabits-v8.0.0-mockup-ui`.
+Tous les fichiers restent directement à la racine de `main`.
+Cache : `sharkhabits-v8.1.0-polish`.
 
-`V8-visual-reference.png` contient la maquette de référence de cette version.
+La maquette de référence est `V8.1-visual-reference.png`.

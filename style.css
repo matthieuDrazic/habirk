@@ -356,3 +356,89 @@ input,select,textarea{
  #sharkGrid .item img,#shopGrid .item img{height:108px!important;padding:10px!important}
  #homeSharks .sharkSprite{width:30%!important}
 }
+
+/* ==========================================================
+   V8.1 — VISUAL POLISH
+   Reference: V8.1 approved mockup.
+   ========================================================== */
+:root{--v81-teal:#078aa2;--v81-dark:#062f3e;--v81-bg:#f7fafb}
+
+/* Keep the version visible but discreet */
+header small{
+ right:16px!important;top:15px!important;
+ font-size:9px!important;padding:4px 7px!important;
+ background:#eef7f8!important;
+}
+header h1{font-size:25px!important}
+
+/* On secondary screens, don't waste a second title-height block */
+body:has(#shop.active) header h1,
+body:has(#sharks.active) header h1,
+body:has(#stats.active) header h1,
+body:has(#track.active) header h1{font-size:0!important}
+body:has(#shop.active) header,
+body:has(#sharks.active) header,
+body:has(#stats.active) header,
+body:has(#track.active) header{height:46px!important;padding:8px 16px!important}
+
+/* Store header */
+#shop .sectionTitle,#sharks .sectionTitle{margin-top:7px!important}
+#shop .sectionTitle h2,#sharks .sectionTitle h2{font-size:27px!important}
+
+/* Catalog/store cards: image first, minimal text */
+#sharkGrid .item,#shopGrid .item{
+ min-height:242px!important;
+ padding:10px 9px 11px!important;
+ display:flex!important;flex-direction:column!important;
+ justify-content:flex-start!important;
+}
+#sharkGrid .item img,#shopGrid .item img{
+ height:118px!important;
+ width:100%!important;
+ object-fit:contain!important;
+ object-position:center!important;
+ padding:5px!important;
+ margin:0 auto!important;
+ background:transparent!important;
+}
+#sharkGrid .item .rarity,#shopGrid .item .rarity{
+ margin-top:2px!important;font-size:9px!important;
+}
+#sharkGrid .item h3,#shopGrid .item h3{
+ font-size:13px!important;min-height:30px!important;
+ display:flex;align-items:center;justify-content:center;
+ margin:3px 0!important;
+}
+#sharkGrid .item p,#shopGrid .item p{
+ margin:0 0 5px!important;font-size:10px!important;
+}
+#sharkGrid .item .lock,#shopGrid .item .lock{
+ width:26px!important;height:26px!important;
+ font-size:13px!important;top:7px!important;right:7px!important;
+ background:rgba(38,59,68,.88)!important;
+}
+
+/* Smaller buttons and less duplicated visual weight */
+#sharkGrid .item .primary,#shopGrid .item .primary,
+#sharkGrid .item .secondary,#shopGrid .item .secondary{
+ min-height:34px!important;padding:7px 9px!important;
+ border-radius:12px!important;font-size:11px!important;
+}
+#sharkGrid .item .row,#shopGrid .item .row{gap:5px!important;margin-top:auto!important}
+
+/* Make shop selector look like the mockup */
+#shop .seg{height:42px!important}
+#shop .seg button{font-size:13px!important}
+
+/* Cleaner tab bar: no emoji boxes/backgrounds */
+nav button{background:transparent!important}
+nav button span{filter:grayscale(1);opacity:.72}
+nav button.active span{filter:grayscale(.15);opacity:1}
+nav button.active{font-weight:750!important}
+
+/* Full-screen aquarium buttons from reference */
+.aqToolbar{gap:10px!important}
+.aqToolbar button{min-height:48px!important;padding:0 22px!important;font-weight:700!important}
+
+/* Cards closer to the V8.1 reference */
+.stat,.goalcard,.item{box-shadow:0 3px 14px rgba(18,58,69,.055)!important}
