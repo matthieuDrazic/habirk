@@ -20,3 +20,9 @@ const SHARK_INFO={
 function openSharkDetail(id){let s=SHARKS.find(x=>x.id===id),info=SHARK_INFO[id]||["—","Océan","Une espèce remarquable de la collection SharkHabits."],own=data.ownedSharks.includes(id);$('#detailImg').src=s.img;$('#detailImg').alt=s.name;$('#detailName').textContent=s.name;$('#detailLatin').textContent=({hammer:'Sphyrna lewini',whale:'Rhincodon typus',tiger:'Galeocerdo cuvier',mako:'Isurus oxyrinchus','great-white':'Carcharodon carcharias',thresher:'Alopias vulpinus',blue:'Prionace glauca',bull:'Carcharhinus leucas',goblin:'Mitsukurina owstoni'}[id]||'SharkHabits Collection');$('#detailRarity').textContent=s.rarity;$('#detailSize').textContent=info[0];$('#detailHabitat').textContent=info[1];$('#detailFact').textContent=info[2];$('#detailUnlock').textContent=own?'Débloqué':s.unlock+(s.unlock==='Boutique'?` · ${s.cost} dents`:'');$('#detailLock').textContent=own?'':'🔒';let a=$('#detailAction');a.textContent=own?(data.activeShark===id?'Requin actif':'Choisir ce requin'):(s.unlock==='Boutique'?`Acheter · ${s.cost} 🦷`:'Continuer ma progression');a.onclick=()=>{if(own){data.activeShark=id;if(!data.aquariumSharks.includes(id))data.aquariumSharks[0]=id;save();render();$('#sharkDetail').close()}else if(s.unlock==='Boutique'){if(data.teeth<s.cost)return alert('Pas assez de dents.');data.teeth-=s.cost;data.ownedSharks.push(id);save();render();openSharkDetail(id)}};$('#sharkDetail').showModal()}
 document.addEventListener('click',e=>{let b=e.target.closest('.sharkInfo');if(b){e.preventDefault();openSharkDetail(b.dataset.id)}});$('.closeDetail').onclick=()=>$('#sharkDetail').close();
 if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js');render();
+document.addEventListener("keydown",e=>{
+ if(e.key==="Escape"){
+   const d=document.querySelector("#manageDialog");
+   if(d&&d.open){d.close();document.body.style.overflow="hidden";renderOcean();}
+ }
+});
