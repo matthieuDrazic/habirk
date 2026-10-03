@@ -1,7 +1,7 @@
-# SharkHabits V14.0 — Stable Core
+# SharkHabits V15.0 — Clean Rebuild
 
-V14 remet le moteur JavaScript à plat : une seule implémentation de chaque fonction, événements statiques installés une seule fois et délégation pour les cartes dynamiques.
+V15 reconstruit entièrement le HTML, le CSS, le JavaScript et le service worker. Aucun code V14 n’est repris. Seuls les assets visuels (requins/décorations/icon) sont conservés.
 
-Correctifs principaux : aquarium cliquable et plein écran, retour/décoration/gestion des requins, navigation, formulaires, filtres, boutique, +/−, calendrier hebdomadaire, import/export, service worker tolérant aux assets optionnels.
+Fonctions : page Aujourd’hui avec semaine cliquable, habitudes/cumul/mesures/objectifs à échéance, Rapports et rythme attendu, fiche détaillée + historique + courbe, aquarium plein écran cliquable, Sharkdex, boutique, dents, thème sombre iOS.
 
-Les anciennes données sont migrées automatiquement vers `sharkHabitsV14`.
+Important : V15 utilise une nouvelle clé de données `sharkHabitsV15` afin qu’un ancien état V14 défectueux ne puisse pas casser la nouvelle architecture.
