@@ -502,3 +502,13 @@ dialog:not([open]){pointer-events:none!important}
 nav{position:fixed!important;inset:auto 0 0 0!important;z-index:2147483647!important;pointer-events:auto!important}
 nav button{pointer-events:auto!important;touch-action:manipulation!important;-webkit-tap-highlight-color:transparent}
 main>.page{pointer-events:auto}
+
+/* V14 Stable Core */
+#oceanCard{cursor:pointer;touch-action:manipulation}
+#oceanCard:active{transform:scale(.997)}
+.aquarium:not(.hidden){display:flex!important}
+.aqCanvas.editing .placed{outline:2px solid rgba(255,255,255,.65);border-radius:10px}
+.aqCanvas.editing{cursor:crosshair}
+button{touch-action:manipulation}
+
+:root{--aquarium-bg:linear-gradient(180deg,#1599b1 0%,#08748a 42%,#06374b 100%)!important}
