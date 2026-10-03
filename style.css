@@ -492,3 +492,8 @@ clip-path:none!important;mask:none!important;background:transparent!important;pa
 .stepBtn.minus{background:#fff;color:#65777f}
 .stepBtn.plus{background:#078aa2;color:#fff;border-color:#078aa2}
 .stepBtn:active{transform:scale(.94)}
+
+/* V13.1 navigation hotfix */
+nav{z-index:10000!important;pointer-events:auto!important}
+nav button{z-index:10001!important;pointer-events:auto!important;touch-action:manipulation!important}
+dialog:not([open]){pointer-events:none!important}
