@@ -159,3 +159,200 @@ input,select,textarea{border-radius:13px;border:1px solid rgba(60,60,67,.16);bac
  #homeSharks .sharkSprite{width:22%!important}
  #aqSharks .sharkSprite{width:26%!important}
 }
+
+/* V7.5 — version badge visible + safe visual framing */
+header small{
+ display:inline-flex!important;
+ align-items:center;
+ gap:5px;
+ padding:5px 9px;
+ border-radius:999px;
+ background:#e8f5f7;
+ color:#086d80;
+ font-size:10px!important;
+ letter-spacing:.25px!important;
+ font-weight:700!important;
+ margin-bottom:5px;
+}
+header small b{font-weight:850}
+header{height:92px!important;align-items:flex-end!important}
+header h1{margin-top:5px!important}
+
+/* Never fill a card by cropping: the complete source canvas always fits. */
+#sharkGrid .item,#shopGrid .item{overflow:hidden!important}
+#sharkGrid .item img,#shopGrid .item img{
+ width:100%!important;
+ height:120px!important;
+ object-fit:contain!important;
+ object-position:50% 50%!important;
+ padding:14px!important;
+ margin:0 auto 4px!important;
+ transform:none!important;
+ box-sizing:border-box!important;
+}
+@media(max-width:430px){
+ #sharkGrid .item img,#shopGrid .item img{
+   height:108px!important;
+   padding:13px!important;
+ }
+}
+
+/* =========================================================
+   SHARKHABITS V8.0 — MOCKUP UI
+   Bright iOS-like interface, teal accents, white cards,
+   strong aquarium imagery, compact information density.
+   ========================================================= */
+:root{
+ --v8-bg:#f6f9f9;
+ --v8-card:#ffffff;
+ --v8-ink:#0d2430;
+ --v8-muted:#6f8089;
+ --v8-teal:#0789a1;
+ --v8-teal-dark:#04667b;
+ --v8-cyan:#27bdd1;
+ --v8-line:#e7eef0;
+ --v8-shadow:0 5px 18px rgba(18,58,69,.07);
+ --v8-radius:20px;
+}
+html{background:var(--v8-bg)}
+body{
+ background:linear-gradient(180deg,#fbfdfd 0%,#f5f8f8 100%)!important;
+ color:var(--v8-ink)!important;
+ font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text",Inter,Arial,sans-serif!important;
+}
+header{
+ height:82px!important;
+ padding:13px 18px 8px!important;
+ background:rgba(250,253,253,.92);
+ backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+}
+header small{
+ display:inline-flex!important;
+ position:absolute;right:18px;top:18px;
+ margin:0!important;padding:5px 8px!important;
+ background:#eef7f8!important;color:#17677a!important;
+ border-radius:999px!important;font-size:10px!important;
+}
+header h1{font-size:28px!important;letter-spacing:-.035em!important;font-weight:800!important}
+main{padding-left:14px!important;padding-right:14px!important}
+.card,.goalcard,.item,.stat{
+ background:#fff!important;
+ border:1px solid #edf2f3!important;
+ border-radius:18px!important;
+ box-shadow:var(--v8-shadow)!important;
+}
+.primary{
+ background:linear-gradient(180deg,#0b96ae,#057c94)!important;
+ color:white!important;border:0!important;border-radius:16px!important;
+ box-shadow:none!important;font-weight:750!important;
+}
+.secondary,.icon{
+ background:#fff!important;border:1px solid #e8eef0!important;
+ border-radius:14px!important;box-shadow:0 2px 8px rgba(0,0,0,.025)!important;
+}
+.chips{gap:7px!important}
+.chip{
+ background:#fff!important;color:#087b94!important;border:1px solid #edf2f3!important;
+ border-radius:999px!important;padding:8px 13px!important;font-weight:650!important;
+}
+.chip.active{background:#062e3d!important;color:#fff!important;border-color:#062e3d!important}
+.seg{background:#edf2f3!important;border-radius:14px!important;padding:2px!important}
+.seg button{border-radius:12px!important;color:#647681!important}
+.seg .active{background:#078ba4!important;color:white!important;box-shadow:none!important}
+.progress,.bar{background:#e9f0f1!important;border-radius:999px!important}
+.progress>i,.bar>i{background:linear-gradient(90deg,#0b91aa,#25bed1)!important;border-radius:999px!important}
+
+/* Home aquarium: V8 is intentionally the visual hero */
+.ocean{
+ border-radius:20px!important;
+ min-height:300px!important;
+ box-shadow:0 10px 28px rgba(2,49,66,.14)!important;
+ border:0!important;
+ background-image:linear-gradient(180deg,rgba(0,92,127,.02),rgba(0,35,55,.12)),var(--aquarium-bg)!important;
+ background-size:cover!important;background-position:center!important;
+}
+.ocean .pill,.oceanBadge{
+ background:rgba(3,43,59,.82)!important;color:#fff!important;
+ backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+ border:1px solid rgba(255,255,255,.12)!important;
+}
+#homeSharks .sharkSprite{width:32%!important;max-height:115px!important;object-fit:contain!important}
+#homeDecor .decorSprite{object-fit:contain!important}
+.aqCanvas{
+ background-image:linear-gradient(180deg,rgba(0,91,128,.02),rgba(0,25,45,.10)),var(--aquarium-bg)!important;
+ background-size:cover!important;background-position:center!important;
+}
+#aqSharks .sharkSprite{width:34%!important;object-fit:contain!important}
+.aqToolbar button{
+ background:rgba(3,36,51,.88)!important;color:#fff!important;
+ border:1px solid rgba(255,255,255,.55)!important;border-radius:999px!important;
+ backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+}
+
+/* V8 cards: denser, cleaner, closer to mockup */
+.goalcard{padding:12px!important;margin-bottom:9px!important}
+.sectionTitle{margin-top:22px!important;margin-bottom:10px!important}
+.sectionTitle h2{font-size:24px!important}
+.stat{padding:13px!important}
+.grid{gap:10px!important}
+
+/* Sharkdex / shop: ALWAYS show complete source canvas */
+#sharkGrid .item,#shopGrid .item{
+ padding:10px!important;overflow:hidden!important;min-width:0!important;
+ border-radius:17px!important;
+}
+#sharkGrid .item img,#shopGrid .item img{
+ display:block!important;width:100%!important;height:116px!important;
+ object-fit:contain!important;object-position:center!important;
+ padding:10px 8px!important;margin:0 auto 3px!important;
+ transform:none!important;box-sizing:border-box!important;
+ filter:drop-shadow(0 5px 7px rgba(0,35,48,.14))!important;
+}
+.item h3{font-size:14px!important;line-height:1.15!important;margin:5px 0 3px!important}
+.item p{font-size:11px!important;color:var(--v8-muted)!important}
+.rarity{font-size:9px!important;letter-spacing:.8px!important}
+.item .lock{
+ width:32px!important;height:32px!important;top:8px!important;right:8px!important;
+ background:#344b55!important;border-radius:50%!important;
+}
+.detailHero img{
+ width:100%!important;max-height:250px!important;object-fit:contain!important;
+ filter:drop-shadow(0 12px 18px rgba(0,30,42,.16))!important;
+}
+
+/* Shark selection sheet */
+#manageDialog .modal{background:#f7fafb!important}
+.manageCheck{
+ background:#fff!important;border:1px solid #edf2f3!important;
+ border-radius:18px!important;box-shadow:0 4px 12px rgba(0,0,0,.035)!important;
+}
+.manageCheck img{object-fit:contain!important;padding:7px!important;box-sizing:border-box!important}
+.manageFooter .primary{width:100%!important}
+
+/* iOS-like translucent bottom tab bar */
+nav{
+ height:78px!important;background:rgba(250,252,252,.94)!important;
+ border-top:.5px solid rgba(60,60,67,.16)!important;
+ backdrop-filter:saturate(180%) blur(22px)!important;
+ -webkit-backdrop-filter:saturate(180%) blur(22px)!important;
+ padding-bottom:max(env(safe-area-inset-bottom),3px)!important;
+}
+nav button{font-size:9px!important;font-weight:650!important;color:#78868e!important}
+nav span{font-size:19px!important;margin-bottom:2px!important}
+nav .active{color:#087f98!important}
+
+/* Dialogs / sheets */
+dialog{border-radius:26px!important;background:#fff!important}
+dialog::backdrop{background:rgba(0,20,28,.30)!important;backdrop-filter:blur(3px)}
+input,select,textarea{
+ background:#fff!important;border:1px solid #e4ecee!important;border-radius:13px!important;
+}
+
+/* Mobile fine tuning */
+@media(max-width:430px){
+ header{height:78px!important}
+ header h1{font-size:26px!important}
+ .ocean{min-height:285px!important}
+ #sharkGrid .item img,#shopGrid .item img{height:108px!important;padding:10px!important}
+ #homeSharks .sharkSprite{width:30%!important}
+}

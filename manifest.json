@@ -1,11 +1,11 @@
 {
-  "name": "SharkHabits V7",
+  "name": "SharkHabits V8",
   "short_name": "SharkHabits",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#edf4f5",
-  "theme_color": "#061e2b",
+  "background_color": "#f7fbfb",
+  "theme_color": "#f7fbfb",
   "icons": [
     {
       "src": "icon.svg",

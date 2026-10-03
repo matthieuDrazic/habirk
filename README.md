@@ -1,12 +1,17 @@
-# SharkHabits V7.4 — Full Assets
+# SharkHabits V8.0
 
-Priorité de cette version : aucun visuel achetable ne doit être tronqué.
+Cette version transpose la direction artistique de la maquette V8 dans l'application :
+- interface blanche/teal très épurée façon iOS ;
+- aquarium beaucoup plus visuel ;
+- cartes, filtres, boutons et navigation redessinés ;
+- Sharkdex et boutique harmonisés ;
+- requins et décorations affichés avec `object-fit: contain` ;
+- aquarium plein écran conservé ;
+- suivi, statistiques, collection et boutique conservés ;
+- migration automatique des données V7 vers V8 au premier lancement ;
+- version **V8.0** visible dans l'interface.
 
-- 25 requins replacés sur une toile transparente normalisée sans supprimer de pixel source.
-- Décorations normalisées de la même manière.
-- Sharkdex et boutique utilisent exclusivement `object-fit: contain`.
-- Les requins peuvent volontairement apparaître plus petits selon leur morphologie.
-- Aquarium : tailles réduites pour privilégier l'affichage complet.
-- Interface iOS Clean conservée.
-- Tous les fichiers sont à placer directement à la racine de `main`.
-- Cache : `sharkhabits-v7.4.0-full-assets`.
+Tous les fichiers sont à déposer directement à la racine de `main`.
+Cache : `sharkhabits-v8.0.0-mockup-ui`.
+
+`V8-visual-reference.png` contient la maquette de référence de cette version.
