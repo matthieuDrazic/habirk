@@ -1,13 +1,12 @@
-# SharkHabits V7.2 — iOS Clean
+# SharkHabits V7.3 — iOS Clean / cadrage corrigé
 
-Corrections principales :
-- recadrage/nettoyage de tous les PNG de requins ;
-- suppression de la zone de légende intégrée aux images ;
-- marge transparente généreuse autour des illustrations ;
-- contraste renforcé pour la lecture sur iPhone ;
-- Sharkdex et boutique : `object-fit: contain`, aucun zoom forcé ;
-- interface épurée inspirée des conventions iOS : fond system gray, cartes blanches, typographie système, navigation translucide ;
-- menu « Requins dans l'aquarium » : fermeture par ✕, Terminé, toucher hors de la fenêtre et Échap ;
-- tous les fichiers restent directement à la racine de `main`.
+Cette version corrige le sur-cadrage de V7.2 :
+- retour à des PNG requins cadrés serrés avec environ 5–8 % de respiration ;
+- aucun énorme cadre transparent autour des requins ;
+- requins plus grands dans l’aquarium ;
+- Sharkdex et boutique en `object-fit: contain` avec zone d’image plus haute ;
+- interface iOS épurée de V7.2 conservée ;
+- fermeture du gestionnaire de requins conservée.
 
-Cache : `sharkhabits-v7.2.0-ios-clean`
+Tous les fichiers restent à la racine de `main`.
+Cache : `sharkhabits-v7.3.0-ios-clean`.

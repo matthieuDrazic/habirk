@@ -119,3 +119,4 @@ input,select,textarea{border-radius:13px;border:1px solid rgba(60,60,67,.16);bac
  .item img,#sharkGrid .item img,#shopGrid .item img{height:118px!important}
  h1{font-size:30px}
 }
+\n/* V7.3 — corrected shark framing */\n.item img,#sharkGrid .item img,#shopGrid .item img{\n  width:100%!important;height:138px!important;object-fit:contain!important;object-position:center!important;\n  transform:none!important;padding:0!important;margin:0 auto 8px!important;\n}\n.sharkSprite{object-fit:contain!important;transform-origin:center center;}\n#homeSharks .sharkSprite{min-width:112px;}\n#aqSharks .sharkSprite{min-width:145px;}\n@media(max-width:430px){\n .item img,#sharkGrid .item img,#shopGrid .item img{height:126px!important}\n #homeSharks .sharkSprite{min-width:105px}\n}\n
